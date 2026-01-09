@@ -1,0 +1,11 @@
+[project]
+name = "inventory-mgmt-system"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "litestar[standard]>=2.19.0",
+    "piccolo[postgres]>=1.30.0",
+    "pwdlib[argon2]>=0.3.0",
+]
