@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Warehouse Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/view_warehouse.css">
+</head>
+<body>
+
+<div class="page">
+
+    <!-- Left: Warehouse Info -->
+    <div class="box">
+        <h2>Warehouse Details</h2>
+
+        <p><strong>Name:</strong> {{ warehouse.wname }}</p>
+        <p><strong>Last Updated:</strong> {{ warehouse.wupdated_on }}</p>
+
+        <h3>Location</h3>
+
+        {% if warehouse.wline1 %}
+            <p>{{ warehouse.wline1 }}</p>
+            {% if warehouse.wline2 %}
+                <p>{{ warehouse.wline2 }}</p>
+            {% endif %}
+            <p>
+                {{ warehouse.wcity }},
+                {{ warehouse.wstate }} –
+                {{ warehouse.wpostal_code }}
+            </p>
+            <p>{{ warehouse.wcountry }}</p>
+
+            {% if warehouse.wlatitude and warehouse.wlongitute %}
+                <p class="small">
+                    Lat: {{ warehouse.wlatitude }},
+                    Long: {{ warehouse.wlongitute }}
+                </p>
+            {% endif %}
+        {% else %}
+            <p class="small">No address assigned.</p>
+        {% endif %}
+    </div>
+
+    <!-- Right: Products -->
+    <div class="box">
+        <h2>Products in Warehouse</h2>
+
+        {% if inventory %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Department</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in inventory %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.department }}</td>
+                    <td>₹ {{ item.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p class="small">No products stored in this warehouse.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

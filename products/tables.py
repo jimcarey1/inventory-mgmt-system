@@ -1,18 +1,28 @@
 from piccolo.table import Table
-from piccolo.columns import Varchar, Text, Timestamp, Integer, UUID, Boolean, Float, ForeignKey
+from piccolo.columns import Varchar, Text, Timestamp, Integer, UUID, Boolean, Float, ForeignKey, M2M, LazyTableReference
 
 
 from datetime import datetime
+from enum import Enum
+
+class Department(Enum):
+    robotics = 'Robotics'
+    diy = 'Diy'
+    horitculture = 'Horticulture'
+    astronomy = 'Astronomy'
+    coding = 'Coding'
 
 class Product(Table, tablename='products'):
     name = Varchar(unique=True)
     slug = Varchar()
     sku = UUID()
+    department = Varchar(default='Robotics', choices=Department)
     description = Text(null=True)
     quantity = Integer(default=0)
     price = Float(default=0)
     created_on = Timestamp()
     updated_on = Timestamp(auto_update=datetime.now)
+    warehouses = M2M(LazyTableReference("Inventory", module_path='inventory.tables'))
 
 class Address(Table, tablename='addresses'):
     line1 = Text()
@@ -32,3 +42,4 @@ class Warehouse(Table, tablename='warehouses'):
     address = ForeignKey(Address, unique=True, null=True)
     created_on = Timestamp()
     updated_on = Timestamp(auto_update=datetime.now)
+    products = M2M(LazyTableReference("Inventory", module_path='inventory.tables'))

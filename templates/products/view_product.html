@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/view_product.css">
+</head>
+<body>
+
+<div class="page">
+
+    <!-- LEFT: Product Details -->
+    <div class="panel panel-left">
+        <h2>Product Information</h2>
+
+        <table class="info-table">
+            <tr>
+                <th>Name</th>
+                <td>{{ product.name }}</td>
+            </tr>
+            <tr>
+                <th>SKU</th>
+                <td>{{ product.sku }}</td>
+            </tr>
+            <tr>
+                <th>Department</th>
+                <td>{{ product.department }}</td>
+            </tr>
+            <tr>
+                <th>Price</th>
+                <td>{{ product.price }}</td>
+            </tr>
+            <tr>
+                <th>Total Quantity</th>
+                <td>{{ product.quantity }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>
+                    {% if product.description %}
+                        {{ product.description }}
+                    {% else %}
+                        <span class="muted">No description</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+        <h2>Warehouse Stock</h2>
+
+        <table class="inventory-table">
+            <thead>
+                <tr>
+                    <th>Warehouse</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for warehouse in product_warehouses %}
+                <tr>
+                    <td>{{ warehouse.name }}</td>
+                    <td>{{ warehouse.city }}</td>
+                    <td>{{ warehouse.state }}</td>
+                    <td>{{ warehouse.quantity }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="muted">
+                        Product not available in any warehouse
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- RIGHT: Add Product to Warehouse -->
+    <div class="panel panel-right">
+        <h2>Add to Warehouse</h2>
+
+        <form id="product-to-warehouse">
+            <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
+
+            <div class="form-row">
+                <label for="warehouse_id">Warehouse</label>
+                <select id="warehouse_id" name="warehouse_id" required>
+                    <option value="">-- Select Warehouse --</option>
+                    {% for warehouse in warehouses %}
+                        <option value="{{ warehouse.id }}">
+                            {{ warehouse.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="quantity">Quantity</label>
+                <input
+                    type="number"
+                    id="quantity"
+                    name="quantity"
+                    min="0"
+                    required
+                >
+            </div>
+
+            <div class="form-actions">
+                <button type="submit">Save</button>
+            </div>
+        </form>
+    </div>
+    <script src="/static/js/viewproduct.js"></script>
+</div>
+
+</body>
+</html>

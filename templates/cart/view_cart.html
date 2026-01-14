@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Your Cart</title>
+  <link rel="stylesheet" href="/static/css/view_cart.css">
+</head>
+<body>
+  <div class="container">
+
+    <h1>Your Rental Cart</h1>
+
+    {% if items and items|length > 0 %}
+      <table class="cart-table" aria-label="Cart items">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Warehouse</th>
+            <th>Quantity</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in items %}
+          <tr>
+            <td>
+              <strong>{{ item.product_name }}</strong>
+              {% if item.product_slug %}
+                <div class="muted">{{ item.product_slug }}</div>
+              {% endif %}
+            </td>
+
+            <td>
+              {{ item.warehouse_name }}
+            </td>
+
+            <td>
+              {{ item.item_quantity }}
+            </td>
+
+            <td>
+              {{ item.item_start_at }}
+            </td>
+
+            <td>
+              {{ item.item_end_at }}
+            </td>
+
+            <td>
+              <form  action="/cart/items/{{item.item_id}}" class="inline-form">
+                <input type="hidden" name="order_item_id" value="{{ item.item_id }}">
+                <button type="submit" class="danger">Remove</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="cart-actions">
+        <form method="delete" action="/cart/clear">
+          {% if csrf_token %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+          {% endif %}
+          <button type="submit" class="secondary">Clear cart</button>
+        </form>
+
+        <form action="/cart/confirm">
+          <input type="hidden" name="order_id" value="{{ order_id }}">
+          <button type="submit" class="primary">
+            Confirm Rental
+          </button>
+        </form>
+      </div>
+
+    {% else %}
+      <div class="empty-cart">
+        <p>Your cart is empty.</p>
+        <a href="/" class="primary">Browse inventory</a>
+      </div>
+    {% endif %}
+    <script src="/static/js/cart.js"></script>
+    </div>
+</body>
+</html>

@@ -6,15 +6,13 @@ the APP_CONFIG.
 import os
 
 from piccolo.conf.apps import AppConfig, table_finder, get_package
-from .commands.seed_products import generate_product
-from .commands.seed_warehouses import seed_warehouses
 
 
 CURRENT_DIRECTORY = os.path.dirname(os.path.abspath(__file__))
 
 
 APP_CONFIG = AppConfig(
-    app_name="products",
+    app_name="orders",
     migrations_folder_path=os.path.join(
         CURRENT_DIRECTORY, "piccolo_migrations"
     ),
@@ -24,5 +22,5 @@ APP_CONFIG = AppConfig(
         exclude_imported=True,
     ),
     migration_dependencies=[],
-    commands=[generate_product, seed_warehouses],
+    commands=[],
 )

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Inventory — Home</title>
+  <link rel="stylesheet" href="/static/css/home.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Top navigation -->
+    <div class="top-nav">
+      <div class="nav-left">
+        <h2>Inventory System</h2>
+      </div>
+
+      <div class="nav-right">
+        <a href="/cart" class="nav-btn cart-btn">
+          🛒 Cart
+        </a>
+
+        <a href="/orders" class="nav-btn orders-btn">
+          📦 Orders
+        </a>
+      </div>
+    </div>
+
+    <!-- Filters / Search -->
+    <div class="card toolbar" role="region" aria-label="Filters">
+      <!-- Filter form uses GET so the server can render filtered results -->
+      <form method="get" action="" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <div>
+          <label for="department">Department</label>
+          <select id="department" name="department">
+            <option value="">--All--</option>
+            {% for dep in departments %}
+              <option value="{{ dep }}" {% if dep == selected_department %}selected{% endif %}>{{ dep }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label for="warehouse">Warehouse</label>
+          <select id="warehouse" name="warehouse">
+            <option value="">--All--</option>
+            {% for w in warehouses %}
+              <option value="{{ w.name }}" {% if w.name == selected_warehouse %}selected{% endif %}>{{ w.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div>
+          <label for="product" class="visually-hidden">Search</label>
+          <input type="search" id="product" name="product" placeholder="Search product name..." value="{{ product|default('') }}">
+        </div>
+
+        <div>
+          <button type="submit">Apply</button>
+          <a href="/" style="text-decoration:none; margin-left:6px;">
+            <button type="button" class="secondary" onclick="location.href='/'">Reset</button>
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <div class="card toolbar">
+      <div class="department">
+        <p><strong>Department:</strong> {{ department}}</p>
+      </div>
+      <div class="warehouse">
+        <p><strong>Warehouse:</strong> {{ warehouse }}</p>
+      </div>
+    </div>
+    <!-- Inventory table -->
+    <div class="table-wrapper">
+    <table aria-label="Inventory table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Available</th>
+          <th style="width:210px">Add to cart</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% if inventories %}
+          {% for row in inventories %}
+          <tr>
+            <td>
+              <strong>{{ row.product.name }}</strong>
+              <div class="muted">{{ row.product.department }}</div>
+            </td>
+            <td>{{ row.quantity }}</td>
+
+            <!-- Add to cart form (POST) -->
+            <!-- inside your loop for each row -->
+<!-- inside your loop for each row -->
+          <td>
+            <form class="add-form" id="{{ loop.index }}" data-row-index="{{ loop.index }}" novalidate>
+              <!-- IMPORTANT: supply inventory_id for the inventory row (product+warehouse) -->
+              <input type="hidden" name="inventory_id" value="{{ row.id }}">
+              <input type="hidden" name="product_id" value="{{ row.product.id }}">
+              <input type="hidden" name="warehouse_id" value="{{ row.warehouse.id }}">
+
+              <label for="qty_{{ loop.index }}" class="visually-hidden">Qty</label>
+              <input id="qty_{{ loop.index }}" class="qty" type="number" name="quantity"
+                    min="1" max="{{ row.quantity }}" value="1" required>
+
+              <div class="timeslot">
+                <label for="start_{{ loop.index }}">From</label>
+                <input id="start_{{ loop.index }}" type="datetime-local" name="start_at" required>
+
+                <label for="end_{{ loop.index }}">To</label>
+                <input id="end_{{ loop.index }}" type="datetime-local" name="end_at" required>
+              </div>
+
+              <div class="form-row">
+                <button type="button" class="check-availability" data-index="{{ loop.index }}">
+                  Check & Add to cart
+                </button>
+                <span class="availability-msg" id="avail_msg_{{ loop.index }}"></span>
+              </div>
+            </form>
+          </td>
+
+
+          </tr>
+          {% endfor %}
+        {% else %}
+          <tr>
+            <td colspan="6" class="muted">No inventory found for the selected filters.</td>
+          </tr>
+        {% endif %}
+      </tbody>
+    </table>
+    </div>
+    <!-- Pagination -->
+    {% if total_pages > 1 %}
+    <div class="card pagination">
+      <div class="pagination-inner">
+
+        {% if has_prev %}
+          <a href="?department={{ department }}&warehouse={{ warehouse }}&product={{ product }}&page={{ page - 1 }}"
+            class="page-btn">
+            ← Prev
+          </a>
+        {% else %}
+          <span class="page-btn disabled">← Prev</span>
+        {% endif %}
+
+        <span class="page-info">
+          Page {{ page }} of {{ total_pages }}
+        </span>
+
+        {% if has_next %}
+          <a href="?department={{ department }}&warehouse={{ warehouse }}&product={{ product }}&page={{ page + 1 }}"
+            class="page-btn">
+            Next →
+          </a>
+        {% else %}
+          <span class="page-btn disabled">Next →</span>
+        {% endif %}
+
+      </div>
+    </div>
+    {% endif %}
+
+    <script src="/static/js/home.js"></script>
+  </div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+/* ====== Global ====== */
+body {
+    margin: 0;
+    padding: 20px;
+    background-color: #eeeeee;
+    font-family: Tahoma, Verdana, Arial, sans-serif;
+    font-size: 12px;
+    color: #000000;
+}
+
+/* ====== Main Container ====== */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #999999;
+    padding: 15px;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+/* ====== Headings ====== */
+h1 {
+    font-size: 16px;
+    margin: 0 0 15px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #999999;
+}
+
+/* ====== Section Title ====== */
+.section-title {
+    font-weight: bold;
+    margin: 15px 0 8px 0;
+}
+
+/* ====== Form Layout ====== */
+.form-row {
+    margin-bottom: 10px;
+}
+
+.two-col {
+    display: flex;
+    gap: 10px;
+}
+
+.field {
+    display: block;
+    width: 100%;
+}
+
+/* ====== Labels ====== */
+label {
+    display: block;
+    margin-bottom: 3px;
+    font-weight: normal;
+}
+
+/* ====== Inputs ====== */
+input,
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: Tahoma, Verdana, Arial, sans-serif;
+    font-size: 12px;
+    padding: 3px;
+    border: 1px solid #7f9db9; /* classic IE border */
+    background-color: #ffffff;
+}
+
+/* Old textarea look */
+textarea {
+    height: 60px;
+    resize: none;
+}
+
+/* ====== Focus (IE-ish) ====== */
+input:focus,
+textarea:focus {
+    background-color: #ffffcc;
+    outline: none;
+}
+
+/* ====== Small helper text ====== */
+.small,
+.hint {
+    font-size: 11px;
+    color: #555555;
+}
+
+/* ====== Actions ====== */
+.actions {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #999999;
+}
+
+/* ====== Buttons ====== */
+button {
+    font-family: Tahoma, Verdana, Arial, sans-serif;
+    font-size: 12px;
+    padding: 3px 10px;
+    border: 1px solid #003c74;
+    background-color: #0a64ad;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+button.secondary {
+    background-color: #e6e6e6;
+    color: #000000;
+    border: 1px solid #7f7f7f;
+    margin-right: 5px;
+}
+
+/* ====== Hover (very subtle) ====== */
+button:hover {
+    background-color: #084b8a;
+}
+
+button.secondary:hover {
+    background-color: #d6d6d6;
+}

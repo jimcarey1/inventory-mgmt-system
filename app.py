@@ -13,7 +13,10 @@ from litestar.template.config import TemplateConfig
 from litestar.static_files import create_static_files_router
 
 from users.controllers import UserController
-from products.controllers import ProductController
+from products.controllers import ProductController, WarehouseController, AddressController
+from inventory.controllers import InventoryController, HomeController
+from orders.controllers import CartController, OrderController
+from users.schema import UserDTO
 from users.tables import User
 
 
@@ -34,15 +37,13 @@ session_config = ServerSideSessionConfig(
     store="sessions"
 )
 
-async def retrieve_user_handler(
-    session: dict,
-    _: ASGIConnection,
-) -> Optional[User]:
+async def retrieve_user_handler(session: dict, _: ASGIConnection) -> Optional[UserDTO]:
     user_id = session.get("user_id")
     if not user_id:
         return None
     users = await User.select().where(User.id == int(user_id))
-    return users[0] if users else None
+    user = users[0] if users else None 
+    return UserDTO(id=user['id'], username=user['username'], email=user['email'], role=user['role'])
 
 
 session_auth = SessionAuth(
@@ -59,6 +60,12 @@ app = Litestar(
     route_handlers=[
         UserController,
         ProductController,
+        WarehouseController,
+        AddressController,
+        InventoryController,
+        HomeController,
+        CartController,
+        OrderController,
         create_static_files_router(
             path="/static",
             directories=["static"],
@@ -70,8 +77,8 @@ app = Litestar(
     ),
     csrf_config=csrf_config,
     on_app_init=[session_auth.on_app_init],
-    debug=True,
      stores={
         "sessions": file_store,   # REGISTER STORE
     },
+    debug=True,
 )
